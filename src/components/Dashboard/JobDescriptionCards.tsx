@@ -301,7 +301,7 @@ interface JobDescriptionCardsProps {
 	jobDescription: string;
 }
 
-const JobDescriptionCards = ({
+export const JobDescriptionCards = ({
 	isRecruiter,
 	jobDescription,
 	attachements,
@@ -325,7 +325,9 @@ const JobDescriptionCards = ({
 	const [editableDepartment, setEditableDepartment] = useState(department);
 	const [editableRecruitmentQuota, setEditableRecruitmentQuota] =
 		useState(recruitmentQuota);
-	const [editableJobType, setEditableJobType] = useState(jobType);
+	const [editableJobType, setEditableJobType] = useState<string | null>(
+		jobType,
+	);
 	const [editableExperiences, setEditableExperiences] = useState(experiences);
 	const [editableLocation, setEditableLocation] = useState(location);
 	const [editableSalary, setEditableSalary] = useState(salary);
@@ -604,5 +606,3 @@ const JobDescriptionCards = ({
 		</Grid>
 	);
 };
-
-export default JobDescriptionCards;

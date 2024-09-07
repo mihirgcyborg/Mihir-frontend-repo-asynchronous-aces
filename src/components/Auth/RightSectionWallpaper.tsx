@@ -1,15 +1,11 @@
-import { theme } from "@/styles/theme";
 import {
 	Box,
 	Image,
-	Stack,
-	Text,
 	useMantineColorScheme,
 	useMantineTheme,
 } from "@mantine/core";
-import React from "react";
 
-const RightSectionWallpaper = () => {
+export const RightSectionWallpaper = () => {
 	const { colorScheme } = useMantineColorScheme();
 	const theme = useMantineTheme();
 
@@ -91,5 +87,3 @@ const RightSectionWallpaper = () => {
 		</Box>
 	);
 };
-
-export default RightSectionWallpaper;

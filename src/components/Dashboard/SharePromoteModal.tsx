@@ -13,7 +13,7 @@ interface SharePromoteModalProps {
 	jobUrl: string;
 }
 
-const SharePromoteModal: React.FC<SharePromoteModalProps> = ({
+export const SharePromoteModal: React.FC<SharePromoteModalProps> = ({
 	opened,
 	onClose,
 	jobUrl,
@@ -88,5 +88,3 @@ const SharePromoteModal: React.FC<SharePromoteModalProps> = ({
 		</Modal>
 	);
 };
-
-export default SharePromoteModal;

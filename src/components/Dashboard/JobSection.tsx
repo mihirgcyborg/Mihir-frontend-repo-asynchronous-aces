@@ -27,7 +27,7 @@ import {
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 
-import ApplyJobModal from "./ApplyJobModal";
+import { ApplyJobModal } from "./ApplyJobModal";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { Job } from "@/types/type";
 import {
@@ -256,7 +256,7 @@ const JobSection = () => {
 	const { jobs, selectedStatus, selectedDepartment } = useAppSelector(
 		(state) => state.jobs,
 	);
-	const loading = !jobs.length;
+	const loading = !jobs?.length;
 	const [searchedJobs, setSearchedJobs] = useState<Job[]>([]);
 	const [modalOpen, setModalOpen] = useState(false);
 	const isRecruiter = useAppSelector((state) => state.toggle.isRecruiter);
@@ -290,10 +290,11 @@ const JobSection = () => {
 		filterAndSortJobs();
 	}, [selectedStatus, selectedDepartment]);
 
-	const handleStatusChange = (value: "active" | "inactive") => {
-		dispatch(setSelectedStatus(value));
+	const handleStatusChange = (value: string | null) => {
+		if (value === "active" || value === "inactive") {
+			dispatch(setSelectedStatus(value));
+		}
 	};
-
 	const handleDepartmentChange = (value: string | null) => {
 		dispatch(setSelectedDepartment(value || "all"));
 	};

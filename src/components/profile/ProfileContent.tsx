@@ -16,7 +16,7 @@ import {
 import { IconPencil } from "@tabler/icons-react";
 import { useState } from "react";
 
-export default function ProfileContent() {
+export function ProfileContent() {
 	const [editMode, setEditMode] = useState(false);
 
 	const [firstName, setFirstName] = useState<string>("John");
@@ -92,7 +92,11 @@ export default function ProfileContent() {
 						>
 							<ActionIcon
 								size="lg"
-								onClick={() => document.getElementById("file-input")?.click()}
+								onClick={() => {
+									if (typeof window !== "undefined") {
+										document.getElementById("file-input")?.click();
+									}
+								}}
 							>
 								<IconPencil size={18} />
 							</ActionIcon>
@@ -197,7 +201,7 @@ export default function ProfileContent() {
 					<TextInput
 						label="Experience"
 						value={experience}
-						onChange={(e) => setExperience(e.target.value)}
+						onChange={(e) => setExperience(parseInt(e.target.value) || 0)}
 						mt="md"
 					/>
 					<Group justify="space-around" mt="xl">

@@ -8,7 +8,7 @@ interface ApplyJobModalProps {
 	jobTitle: string;
 }
 
-const ApplyJobModal: React.FC<ApplyJobModalProps> = ({
+export const ApplyJobModal: React.FC<ApplyJobModalProps> = ({
 	opened,
 	onClose,
 	onSubmit,
@@ -60,5 +60,3 @@ const ApplyJobModal: React.FC<ApplyJobModalProps> = ({
 		</Modal>
 	);
 };
-
-export default ApplyJobModal;

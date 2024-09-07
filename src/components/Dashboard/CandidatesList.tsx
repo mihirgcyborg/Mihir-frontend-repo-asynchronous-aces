@@ -53,7 +53,7 @@ const dummyCandidates = [
 	// Add more candidates as needed
 ];
 
-const CandidatesList = ({ jobId }: { jobId: number }) => {
+export const CandidatesList = ({ jobId }: { jobId: number }) => {
 	const [candidates, setCandidates] = useState<Candidate[]>(dummyCandidates);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -114,8 +114,6 @@ const CandidatesList = ({ jobId }: { jobId: number }) => {
 		</Table>
 	);
 };
-
-export default CandidatesList;
 
 export const CandidateRow = ({ user }: { user: Candidate }) => {
 	const [opened, setOpened] = useState(false);

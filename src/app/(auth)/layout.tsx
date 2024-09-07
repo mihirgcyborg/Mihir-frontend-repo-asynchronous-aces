@@ -12,7 +12,7 @@ import {
 import classes from "./layout.module.css";
 import { usePathname } from "next/navigation";
 import { Logo } from "@/components/Logo/Logo";
-import RightSectionWallpaper from "@/components/Auth/RightSectionWallpaper";
+import { RightSectionWallpaper } from "@/components/Auth/RightSectionWallpaper";
 import { useMediaQuery } from "@mantine/hooks";
 
 interface Props {

@@ -5,10 +5,10 @@ import { useMediaQuery } from "@mantine/hooks";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { useParams, useRouter } from "next/navigation";
 
-import JobDescriptionCards from "@/components/Dashboard/JobDescriptionCards";
-import CandidatesList from "@/components/Dashboard/CandidatesList";
-import ApplyJobModal from "@/components/Dashboard/ApplyJobModal";
-import SharePromoteModal from "@/components/Dashboard/SharePromoteModal";
+import { JobDescriptionCards } from "@/components/Dashboard/JobDescriptionCards";
+import { CandidatesList } from "@/components/Dashboard/CandidatesList";
+import { ApplyJobModal } from "@/components/Dashboard/ApplyJobModal";
+import { SharePromoteModal } from "@/components/Dashboard/SharePromoteModal";
 import { useAppSelector } from "@/redux/store";
 
 type Attachment = {

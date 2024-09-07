@@ -1,5 +1,4 @@
 "use client";
-
 import {
 	AppShell,
 	Box,
@@ -12,7 +11,6 @@ import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { AdminHeader } from "@/components/Headers/AdminHeader";
 import { Navbar } from "@/components/Navbar/Navbar";
 import { navLinks } from "@/config";
-import AsideComponent from "@/components/Aside/AsideComponent";
 
 interface Props {
 	children: React.ReactNode;

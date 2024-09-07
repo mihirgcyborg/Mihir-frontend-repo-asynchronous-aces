@@ -1,3 +1,4 @@
+'use client'
 import { Dispatch } from '@reduxjs/toolkit';
 import { setJobs } from './jobSlice';
 

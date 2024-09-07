@@ -16,7 +16,7 @@ import { IconChevronDown } from "@tabler/icons-react";
 import { Logo } from "@/components/Logo/Logo";
 import classes from "./Header.module.css";
 import { useRouter } from "next/navigation";
-import { useCookie } from "react-use"; // Import useCookies
+import { useCookie } from "react-use";
 
 interface HeaderActionProps {
 	links: {

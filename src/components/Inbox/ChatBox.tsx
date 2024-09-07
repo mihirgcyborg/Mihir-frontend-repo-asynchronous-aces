@@ -513,12 +513,14 @@ const ChatBox = () => {
 														variant="outline"
 														mt="sm"
 														onClick={() => {
-															const input = document.createElement("input");
-															input.type = "file";
-															input.onchange = (event: any) => {
-																handleFileUpload(event.target.files[0]);
-															};
-															input.click();
+															if (typeof window !== "undefined") {
+																const input = document.createElement("input");
+																input.type = "file";
+																input.onchange = (event: any) => {
+																	handleFileUpload(event.target.files[0]);
+																};
+																input.click();
+															}
 														}}
 													>
 														Attach
@@ -751,12 +753,14 @@ const ChatBox = () => {
 													variant="outline"
 													mt="sm"
 													onClick={() => {
-														const input = document.createElement("input");
-														input.type = "file";
-														input.onchange = (event: any) => {
-															handleFileUpload(event.target.files[0]);
-														};
-														input.click();
+														if (typeof window !== "undefined") {
+															const input = document.createElement("input");
+															input.type = "file";
+															input.onchange = (event: any) => {
+																handleFileUpload(event.target.files[0]);
+															};
+															input.click();
+														}
 													}}
 												>
 													Attach

@@ -1,7 +1,9 @@
 import React from "react";
-import Lottie from "lottie-react";
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
+
 import { Box, Flex } from "@mantine/core";
 import classes from "./LottieComponent.module.css";
+import dynamic from "next/dynamic";
 const LottieComponent: React.FC<{
 	animationData: unknown;
 }> = ({ animationData }) => {

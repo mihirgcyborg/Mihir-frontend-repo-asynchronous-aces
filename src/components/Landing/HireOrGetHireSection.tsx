@@ -19,7 +19,7 @@ export const cardData = [
 	},
 ];
 
-const HireOrGetHireSection = () => {
+export const HireOrGetHireSection = () => {
 	const jobsCards = cardData.map((card, idx) => (
 		<JobCard
 			key={idx}
@@ -42,5 +42,3 @@ const HireOrGetHireSection = () => {
 		</Flex>
 	);
 };
-
-export default HireOrGetHireSection;
