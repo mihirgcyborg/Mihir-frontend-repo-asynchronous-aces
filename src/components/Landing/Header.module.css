@@ -28,8 +28,8 @@
 	height: rem(60);
 	display: flex;
 	padding: 0 var(--mantine-spacing-xl);
-	justify-content: 'space-between';
-	align-items: 'center';
+	justify-content: "space-between";
+	align-items: "center";
 }
 
 .links {
@@ -55,7 +55,10 @@
 	font-weight: 500;
 
 	&:hover {
-		background-color: lightdark(var(--mantine-colors-dark-6), var(--mantine-colors-gray-0));
+		background-color: lightdark(
+			var(--mantine-colors-dark-6),
+			var(--mantine-colors-gray-0)
+		);
 	}
 }
 

@@ -3,49 +3,51 @@ import {
   IconDashboard,
   IconLock,
   IconMoodSmile,
+  IconBriefcase,
+  IconUser,
+  IconListCheck,
+  IconNote,
+  IconFolder,
+  IconInbox,
 } from "@tabler/icons-react";
 import type { NavItem } from "@/types/nav-item";
+import { IconBriefcase2 } from "@tabler/icons-react";
+
+export const maxSkillsForAJob = 6;
+
+export const asideOptionData = [
+  {
+    name: "Task",
+    icon: IconListCheck,
+  },
+  {
+    name: "Notes",
+    icon: IconNote,
+  },
+  {
+    name: "Folder",
+    icon: IconFolder,
+  },
+];
 
 export const navLinks: NavItem[] = [
   { label: "Dashboard", icon: IconDashboard, link: "/dashboard" },
-
   {
-    label: "Components",
-    icon: IconComponents,
-    initiallyOpened: true,
-    links: [
-      {
-        label: "Table",
-        link: "/dashboard/table",
-      },
-      {
-        label: "Form",
-        link: "/dashboard/form",
-      },
-    ],
+    label: "Inbox",
+    icon: IconInbox, // Updated to a more appropriate icon for inbox
+    link: "/inbox",
   },
   {
-    label: "Auth",
-    icon: IconLock,
+    label: "RECRUITMENT",
+    icon: IconMoodSmile, // You could replace this if you find a better match
     initiallyOpened: true,
     links: [
       {
-        label: "Login",
-        link: "/login",
+        label: "Jobs",
+        link: "/",
       },
       {
-        label: "Register",
-        link: "/register",
-      },
-    ],
-  },
-  {
-    label: "Sample",
-    icon: IconMoodSmile,
-    initiallyOpened: true,
-    links: [
-      {
-        label: "Landing",
+        label: "Candidates",
         link: "/",
       },
     ],

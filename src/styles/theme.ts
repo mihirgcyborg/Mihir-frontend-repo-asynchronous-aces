@@ -21,7 +21,33 @@ export const theme = createTheme({
 			"#14532b",
 			"#052e14",
 		],
+		yellow: [
+			"#FFF9DB", 
+			"#FFF2B3",
+			"#FFEB8A",
+			"#FFE562",
+			"#FFDE3A",
+			"#F3DD15", 
+			"#E2C514",
+			"#D1AE13",
+			"#BF9811",
+			"#AD830F",
+			"#99700D", 
+		],
+		navy: [
+			"#E8EBF0", // Lightest shade
+			"#C0C7D1",
+			"#99A3B3",
+			"#717F95",
+			"#4A5B77",
+			"#243759",
+			"#071126", // Your secondary color
+			"#060F20",
+			"#050D1A",
+			"#040B14",
+			"#03080E", // Darkest shade
+		],
 	},
-	primaryColor: "emerald",
+	primaryColor: "yellow",  
 	defaultRadius: "md",
 });

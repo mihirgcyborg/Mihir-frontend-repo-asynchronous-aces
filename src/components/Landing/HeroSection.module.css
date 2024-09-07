@@ -45,10 +45,26 @@
 		line-height: 1.15;
 	}
 }
+.subheading {
+	color: #f3dd15;
+}
 
+.titleDesc {
+	max-width: rem(400px);
+	font-size: rem(36px);
+	font-weight: 400;
+	text-align: left;
+	opacity: 68%;
+	line-height: 1.05;
+	@media (max-width: $mantine-breakpoint-md) {
+		max-width: 100%;
+		font-size: rem(26px);
+		line-height: 1.15;
+	}
+}
 .description {
 	max-width: rem(400px);
-
+	text-align: left;
 	@media (min-width: $mantine-breakpoint-md) {
 		max-width: 100%;
 	}
