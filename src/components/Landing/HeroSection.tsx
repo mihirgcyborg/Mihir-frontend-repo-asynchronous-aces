@@ -1,5 +1,4 @@
 "use client";
-
 import {
 	Box,
 	Button,
@@ -17,22 +16,17 @@ import {
 import { IconArrowRight, IconStar } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import classes from "./HeroSection.module.css";
-import Cookies from "js-cookie";
+
 import hrlottieImg from "../../../assests/HrLottieImage.json";
 import LottieComponent from "./LottieComponent";
-import { relative } from "path";
+import { useMediaQuery } from "@mantine/hooks";
+
 export function HeroSection() {
 	const router = useRouter();
 	const handleGetStarted = () => {
-		const token = Cookies.get("token");
-
-		if (token) {
-			router.push("/dashboard");
-		} else {
-			router.push("/login");
-		}
+		router.push("/dashboard");
 	};
-
+	const isSmallScreen = useMediaQuery("(max-width: 768px)");
 	return (
 		<Container pt="sm" size="lg">
 			<div className={classes.inner}>
@@ -58,12 +52,51 @@ export function HeroSection() {
 									</Text>
 								</Text>
 							</div>
-							<Text className={classes.description} mt={30}>
+							{!isSmallScreen && (
+								<>
+									<Text className={classes.description} mt={30}>
+										Are you tired of sifting through endless resumes and
+										struggling to find the right talent? You're not alone. At
+										RecruitNext, we understand the challenges SMEs face in
+										recruitment..
+									</Text>
+									<Group mt={40}>
+										<Button
+											size="lg"
+											className={classes.control}
+											onClick={handleGetStarted}
+											rightSection={<IconArrowRight />}
+										>
+											Get started
+										</Button>
+										<Button
+											variant="outline"
+											size="lg"
+											className={classes.control}
+											onClick={() => {
+												// window.open("https://github.com/jotyy/mantine-admin");
+											}}
+											rightSection={<IconStar />}
+										>
+											Give a Star
+										</Button>
+									</Group>
+								</>
+							)}
+						</Stack>
+					</GridCol>
+
+					<GridCol span={6}>
+						<LottieComponent animationData={hrlottieImg} />
+					</GridCol>
+					{isSmallScreen && (
+						<Group justify="center">
+							<Text className={classes.description} w={"80%"} mt={30}>
 								Are you tired of sifting through endless resumes and struggling
 								to find the right talent? You're not alone. At RecruitNext, we
 								understand the challenges SMEs face in recruitment..
 							</Text>
-							<Group mt={40}>
+							<Group mt={40} w={"80%"}>
 								<Button
 									size="lg"
 									className={classes.control}
@@ -84,15 +117,11 @@ export function HeroSection() {
 									Give a Star
 								</Button>
 							</Group>
-						</Stack>
-					</GridCol>
-					<GridCol span={6}>
-						<LottieComponent animationData={hrlottieImg} />
-					</GridCol>
+						</Group>
+					)}
 				</Grid>
 			</div>
 			<SimpleGrid
-				mt={60}
 				cols={{ base: 1, sm: 2, lg: 2 }}
 				spacing={{ base: "lg", md: "lg", lg: "xl" }}
 			>

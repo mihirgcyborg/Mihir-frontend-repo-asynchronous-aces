@@ -1,5 +1,6 @@
 export interface Job {
-	id: number;
+	docId?:string;
+	id: string;
 	title: string;
 	department: string;
 	jobType: string;
@@ -8,13 +9,15 @@ export interface Job {
 	location: string;
 	salary: string;
 	status?: "active" | "inactive";
-	candidatesApplied?: string;
+	candidatesApplied?: number;
+	createdBy:string | undefined;
 }
 
 export interface JobState {
     jobs: Job[];
     selectedStatus: 'active' | 'inactive';
     selectedDepartment: string;
+	isLoading: boolean;
   }
 
 
@@ -29,3 +32,8 @@ export interface JobState {
 	jobTitle?: string;
 	experience?: number |null;
   }
+
+  export type user={
+    uid:string;
+    email:string;
+ }

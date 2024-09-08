@@ -35,7 +35,12 @@ import { maxSkillsForAJob } from "@/config";
 import { theme } from "@/styles/theme";
 import { notifications } from "@mantine/notifications";
 import axios from "axios";
+import { Timestamp } from "firebase/firestore";
 
+interface FirestoreTimestamp {
+	seconds: number;
+	nanoseconds: number;
+}
 type attachement = {
 	name: string;
 	url: string;
@@ -131,7 +136,7 @@ export const DescriptionEditor = ({
 		],
 		content: jobDescription,
 		onUpdate({ editor }) {
-			console.log(editor);
+			// console.log(editor);
 			onChange(editor.getHTML());
 		},
 	});
@@ -392,6 +397,7 @@ export const JobDescriptionCards = ({
 			console.error("Failed to save job details:", error);
 		}
 	};
+
 	return (
 		<Grid>
 			<GridCol span={{ sm: 12, md: 12, lg: 8 }} bg={bg} mt={5} p={20}>
@@ -487,7 +493,7 @@ export const JobDescriptionCards = ({
 								Job Creation Date
 							</Text>
 							<Text size="xs" w={500}>
-								{createdDate?.toUTCString()}
+								{createdDate ? formatDate(createdDate) : "Date not available"}
 							</Text>
 						</Grid.Col>
 						<Grid.Col span={{ lg: 12, md: 12, sm: 4 }}>
@@ -606,3 +612,32 @@ export const JobDescriptionCards = ({
 		</Grid>
 	);
 };
+
+export function formatDate(
+	date: Date | FirestoreTimestamp | Timestamp,
+): string {
+	let jsDate: Date;
+
+	if (date instanceof Date) {
+		jsDate = date;
+	} else if (date instanceof Timestamp) {
+		jsDate = date.toDate();
+	} else if (
+		typeof date === "object" &&
+		"seconds" in date &&
+		"nanoseconds" in date
+	) {
+		jsDate = new Date(date.seconds * 1000 + date.nanoseconds / 1000000);
+	} else {
+		throw new Error("Invalid date format");
+	}
+
+	return jsDate.toLocaleString("en-US", {
+		year: "numeric",
+		month: "short",
+		day: "numeric",
+		hour: "2-digit",
+		minute: "2-digit",
+		hour12: true,
+	});
+}

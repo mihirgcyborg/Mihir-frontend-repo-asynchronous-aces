@@ -1,6 +1,6 @@
 "use client";
 
-import { signupUser } from "@/api/auth";
+import { signUpUser } from "@/api/auth";
 import {
 	Button,
 	Paper,
@@ -13,6 +13,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/redux/store";
 import { updateEmail } from "@/redux/features/userProfile/userProfileSlice";
+import { setCurrentUser, setLoading } from "@/redux/features/authSlice";
+import { user } from "@/types/type";
+import { setCandidate, setRecruiter } from "@/redux/features/toggle/toogle";
 
 export function RegisterForm() {
 	const [email, setEmail] = useState<string>("");
@@ -27,11 +30,25 @@ export function RegisterForm() {
 			alert("Passwords do not match");
 			return;
 		}
+		dispatch(setLoading(true));
 		try {
 			// Sign up user
-			const response = await signupUser({ email, password });
-			dispatch(updateEmail({ email: response.email }));
-			// Redirect to the profile page after signup
+			const userData = await signUpUser(email, password, role);
+			dispatch(setCurrentUser(userData as user));
+			userData.role === "recruiter"
+				? dispatch(setRecruiter())
+				: dispatch(setCandidate());
+
+			// const options = rememberMe
+			// 	? { path: "/", maxAge: 30 * 24 * 60 * 60 }
+			// 	: { path: "/", maxAge: 3600 };
+
+			// Store user data
+
+			sessionStorage.setItem("userEmail", email);
+			sessionStorage.setItem("userUid", userData.uid);
+			sessionStorage.setItem("userRole", userData.role);
+
 			router.push("/profile");
 		} catch (error) {
 			alert("Error during signup.");

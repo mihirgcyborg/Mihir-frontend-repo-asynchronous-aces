@@ -17,6 +17,7 @@ interface Props {
 
 export function Navbar({ data }: Props) {
 	const [selected, setSelected] = useState<string | null>(null);
+	const [email, setEmail] = useState<string | null>(null);
 	// Access userProfile from Redux store
 	const userProfile = useAppSelector((state) => state.userProfile);
 	const isRecruiter = useAppSelector((state) => state.toggle.isRecruiter); // Get the current role
@@ -30,12 +31,20 @@ export function Navbar({ data }: Props) {
 		userProfile?.firstName && userProfile?.lastName
 			? `${userProfile.firstName} ${userProfile.lastName}`
 			: "Complete your profile";
-	const email = userProfile?.email ? userProfile.email : "";
-
 	useEffect(() => {
-		const savedSelection = localStorage.getItem("selectedNavLink");
-		setSelected(savedSelection || "Dashboard");
-	}, []);
+		if (typeof window !== "undefined") {
+			// Access localStorage and sessionStorage only on the client-side
+			const storedEmail = userProfile?.email
+				? userProfile.email
+				: sessionStorage.getItem("userEmail") ||
+					localStorage.getItem("userEmail");
+			setEmail(storedEmail);
+		}
+	}, [userProfile?.email]);
+	// useEffect(() => {
+	// 	const savedSelection = localStorage.getItem("selectedNavLink");
+	// 	setSelected(savedSelection || "Dashboard");
+	// }, []);
 	const handleLinkClick = (label: string) => {
 		setSelected(label);
 		localStorage.setItem("selectedNavLink", label);
@@ -69,7 +78,7 @@ export function Navbar({ data }: Props) {
 			</ScrollArea>
 
 			<div className={classes.footer}>
-				<UserButton image={avatar} name={name} email={email} />
+				<UserButton image={avatar} name={name} email={email ? email : ""} />
 			</div>
 		</>
 	);

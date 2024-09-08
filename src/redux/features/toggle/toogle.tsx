@@ -7,9 +7,7 @@ const toggleSlice = createSlice({
 	},
 	reducers: {
 		toggleBetweenRecruiterAndCandidate(state) {
-			console.log(state.isRecruiter, "before");
 			state.isRecruiter = !state.isRecruiter;
-			console.log(state.isRecruiter, "after");
 		},
 		setRecruiter(state) {
 			state.isRecruiter = true; // explicitly set recruiter state

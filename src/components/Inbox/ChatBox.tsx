@@ -33,6 +33,7 @@ import CollaborativeEditor from "./CollaborativeEditor";
 import { useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { useAppSelector } from "@/redux/store";
+import withAuth from "../Hoc/withAuth";
 
 // Type Definitions
 type User = {
@@ -853,7 +854,7 @@ const ChatBox = () => {
 	);
 };
 
-export default ChatBox;
+export default withAuth(ChatBox);
 
 // ChatItem Component for rendering individual chat list items
 const ChatItem = ({

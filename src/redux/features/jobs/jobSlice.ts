@@ -2,83 +2,85 @@
 import { Job, JobState } from "@/types/type";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-
+const dummyJobs=[{
+  id:" 1",
+  title: "Software Engineer",
+  department: "Engineering",
+  jobType: "Full-time",
+  recruitmentQuota: "2",
+  experiences: "2+ years",
+  location: "Remote",
+  salary: "$80,000 - $100,000",
+  status: "active",
+  candidatesApplied: 10,
+},
+{
+  id: "2",
+  title: "Marketing Manager",
+  department: "Marketing",
+  jobType: "Full-time",
+  recruitmentQuota: "1",
+  experiences: "5+ years",
+  location: "San Francisco, CA",
+  salary: "$120,000 - $140,000",
+  status: "active",
+  candidatesApplied: 10,
+},
+{
+  id: "3",
+  title: "UI/UX Designer",
+  department: "Design",
+  jobType: "Full-time",
+  recruitmentQuota: "1",
+  experiences: "3+ years",
+  location: "New York, NY",
+  salary: "$90,000 - $110,000",
+  status: "inactive",
+  candidatesApplied: 10,
+},
+{
+  id: "4",
+  title: "Content Writer",
+  department: "Marketing",
+  jobType: "Part-time",
+  recruitmentQuota: "1",
+  experiences: "2+ years",
+  location: "Remote",
+  salary: "$40,000 - $50,000",
+  status: "inactive",
+  candidatesApplied: 10,
+},
+{
+  id: "5",
+  title: "UI/UX Designer",
+  department: "Design",
+  jobType: "Full-time",
+  recruitmentQuota: "1",
+  experiences: "3+ years",
+  location: "New York, NY",
+  salary: "$90,000 - $110,000",
+  status: "active",
+  candidatesApplied: 10,
+},
+{
+  id: "6",
+  title: "UI/UX Designer",
+  department: "Design",
+  jobType: "Full-time",
+  recruitmentQuota: "1",
+  experiences: "3+ years",
+  location: "New York, NY",
+  salary: "$90,000 - $110,000",
+  status: "active",
+  candidatesApplied: 10,
+}];
 
 const initialState:JobState={
-    jobs:[{
-      id: 1,
-      title: "Software Engineer",
-      department: "Engineering",
-      jobType: "Full-time",
-      recruitmentQuota: "2",
-      experiences: "2+ years",
-      location: "Remote",
-      salary: "$80,000 - $100,000",
-      status: "active",
-      candidatesApplied: "10",
-    },
-    {
-      id: 2,
-      title: "Marketing Manager",
-      department: "Marketing",
-      jobType: "Full-time",
-      recruitmentQuota: "1",
-      experiences: "5+ years",
-      location: "San Francisco, CA",
-      salary: "$120,000 - $140,000",
-      status: "active",
-      candidatesApplied: "10",
-    },
-    {
-      id: 3,
-      title: "UI/UX Designer",
-      department: "Design",
-      jobType: "Full-time",
-      recruitmentQuota: "1",
-      experiences: "3+ years",
-      location: "New York, NY",
-      salary: "$90,000 - $110,000",
-      status: "inactive",
-      candidatesApplied: "10",
-    },
-    {
-      id: 4,
-      title: "Content Writer",
-      department: "Marketing",
-      jobType: "Part-time",
-      recruitmentQuota: "1",
-      experiences: "2+ years",
-      location: "Remote",
-      salary: "$40,000 - $50,000",
-      status: "inactive",
-      candidatesApplied: "10",
-    },
-    {
-      id: 5,
-      title: "UI/UX Designer",
-      department: "Design",
-      jobType: "Full-time",
-      recruitmentQuota: "1",
-      experiences: "3+ years",
-      location: "New York, NY",
-      salary: "$90,000 - $110,000",
-      status: "active",
-      candidatesApplied: "10",
-    },
-    {
-      id: 6,
-      title: "UI/UX Designer",
-      department: "Design",
-      jobType: "Full-time",
-      recruitmentQuota: "1",
-      experiences: "3+ years",
-      location: "New York, NY",
-      salary: "$90,000 - $110,000",
-      status: "active",
-      candidatesApplied: "10",
-    }],
+    jobs:[],
     selectedStatus: 'active',
     selectedDepartment: 'all',
+    isLoading:false,
+
 } 
 
 const jobSlice = createSlice({
@@ -86,6 +88,7 @@ const jobSlice = createSlice({
     initialState,
     reducers:{
         setJobs(state, action: PayloadAction<Job[]>) {
+          // console.log(action.payload)
             state.jobs = action.payload;
           },
        
@@ -104,9 +107,12 @@ const jobSlice = createSlice({
           addJob(state, action: PayloadAction<Job>) {
             state.jobs.push(action.payload);
           },
+          setLoadingForJobs:(state,action:PayloadAction<boolean>)=>{
+            state.isLoading=action.payload;
+        },
     }
 
 });
 
-export const { addJob, updateJob, setJobs, setSelectedStatus, setSelectedDepartment } = jobSlice.actions;
+export const { addJob, updateJob, setJobs, setSelectedStatus, setSelectedDepartment ,setLoadingForJobs} = jobSlice.actions;
 export default jobSlice.reducer;

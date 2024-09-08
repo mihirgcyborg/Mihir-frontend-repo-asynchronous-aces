@@ -1,8 +1,15 @@
 "use client";
 
 import { loginUser } from "@/api/auth";
-import { login } from "@/redux/features/authSlice";
-import { useAppDispatch } from "@/redux/store";
+import {
+	setCurrentUser,
+	setError,
+	setLoading,
+} from "@/redux/features/authSlice";
+import { setCandidate, setRecruiter } from "@/redux/features/toggle/toogle";
+
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { user } from "@/types/type";
 import {
 	Anchor,
 	Button,
@@ -10,9 +17,11 @@ import {
 	Checkbox,
 	Group,
 	PasswordInput,
+	Text,
 	TextInput,
 } from "@mantine/core";
 import axios from "axios";
+import { FirebaseError } from "firebase/app";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useCookie } from "react-use";
@@ -20,32 +29,45 @@ import { useCookie } from "react-use";
 export function LoginForm() {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const [cookie, setCookie] = useCookie("userToken");
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+	const [cookie, setCookie] = useCookie("userUid");
+	const [email, setEmail] = useState("Test1234@gmail.com");
+	const [password, setPassword] = useState("Test@1234");
 	const [rememberMe, setRememberMe] = useState(false);
-	const [loading, setLoading] = useState(false);
+	const error = useAppSelector((state) => state.auth.error);
+	const loading = useAppSelector((state) => state.auth.isLoading);
 
 	const handleSignIn = async () => {
-		setLoading(true);
+		dispatch(setLoading(true));
 		try {
-			const data = await loginUser(email, password);
-			const { token } = data;
-			dispatch(login(token));
-			const options = rememberMe
-				? { path: "/", maxAge: 30 * 24 * 60 * 60 }
-				: { path: "/", maxAge: 3600 };
+			const userData = await loginUser(email, password);
+			dispatch(setCurrentUser(userData as user));
+			userData.role === "recruiter"
+				? dispatch(setRecruiter())
+				: dispatch(setCandidate());
 
-			setCookie(token, options);
+			// const options = rememberMe
+			// 	? { path: "/", maxAge: 30 * 24 * 60 * 60 }
+			// 	: { path: "/", maxAge: 3600 };
+
+			// Store user data
+			if (rememberMe) {
+				localStorage.setItem("userEmail", email);
+				localStorage.setItem("userUid", userData.uid);
+				localStorage.setItem("userRole", userData.role);
+			} else {
+				sessionStorage.setItem("userEmail", email);
+				sessionStorage.setItem("userUid", userData.uid);
+				sessionStorage.setItem("userRole", userData.role);
+			}
 			router.push("/dashboard");
 		} catch (error) {
-			if (error instanceof Error) {
-				alert(error.message || "Login failed. Please check your credentials.");
+			if (error instanceof FirebaseError) {
+				dispatch(setError(error.message)); // Convert FirebaseError to string message
 			} else {
-				alert("An unexpected error occurred.");
+				dispatch(setError("An unexpected error occurred."));
 			}
 		} finally {
-			setLoading(false);
+			dispatch(setLoading(false));
 		}
 	};
 	return (
@@ -71,6 +93,7 @@ export function LoginForm() {
 					checked={rememberMe}
 					onChange={(event) => setRememberMe(event.currentTarget.checked)}
 				/>
+				{error && <Text size="sm">{error}</Text>}
 				<Anchor size="sm" href="#">
 					Forgot Password?
 				</Anchor>

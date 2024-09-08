@@ -1,6 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Grid, Button, Flex, Box, Text, Tabs, GridCol } from "@mantine/core";
+import {
+	Grid,
+	Button,
+	Flex,
+	Box,
+	Text,
+	Tabs,
+	GridCol,
+	Loader,
+} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { useParams, useRouter } from "next/navigation";
@@ -10,6 +19,14 @@ import { CandidatesList } from "@/components/Dashboard/CandidatesList";
 import { ApplyJobModal } from "@/components/Dashboard/ApplyJobModal";
 import { SharePromoteModal } from "@/components/Dashboard/SharePromoteModal";
 import { useAppSelector } from "@/redux/store";
+import {
+	collection,
+	doc,
+	DocumentSnapshot,
+	onSnapshot,
+	QuerySnapshot,
+} from "firebase/firestore";
+import { db } from "@/firebase/firebaseConfig";
 
 type Attachment = {
 	name: string;
@@ -17,7 +34,7 @@ type Attachment = {
 };
 
 type JobDetails = {
-	id: number;
+	id: string;
 	title: string;
 	department: string;
 	jobType: string;
@@ -34,7 +51,7 @@ type JobDetails = {
 };
 
 const dummyJobDetails: JobDetails = {
-	id: 1,
+	id: "1",
 	title: "Software Engineer",
 	department: "Engineering",
 	jobType: "Full-time",
@@ -53,13 +70,13 @@ const dummyJobDetails: JobDetails = {
 		},
 	],
 	jobDescription:
-		'<h2 style="font-size: 24px; font-weight: bold; margin-bottom: 16px;">Job Title:</h2><p>Enter Job Title</p><h3 style="font-size: 18px; font-weight: bold; margin-bottom: 12px;">Job Description:</h3><p>Enter Job Description</p><h3 style="font-size: 18px; font-weight: bold; margin-bottom: 12px;">Responsibilities:</h3><ul style="list-style-type: disc; padding-left: 20px;"><li>Responsibility 1</li><li>Responsibility 2</li><li>Responsibility 3</li></ul><h3 style="font-size: 18px; font-weight: bold; margin-bottom: 12px;">Requirements:</h3><ul style="list-style-type: disc; padding-left: 20px;"><li>Requirement 1</li><li>Requirement 2</li><li>Requirement 3</li></ul></p>',
+		'<h3 style="font-size: 18px; font-weight: bold; margin-bottom: 12px;">Job Description:</h3><p>Enter Job Description</p><h3 style="font-size: 18px; font-weight: bold; margin-bottom: 12px;">Responsibilities:</h3><ul style="list-style-type: disc; padding-left: 20px;"><li>Responsibility 1</li><li>Responsibility 2</li><li>Responsibility 3</li></ul><h3 style="font-size: 18px; font-weight: bold; margin-bottom: 12px;">Requirements:</h3><ul style="list-style-type: disc; padding-left: 20px;"><li>Requirement 1</li><li>Requirement 2</li><li>Requirement 3</li></ul>',
 };
 
 const JobDetails: React.FC = () => {
 	const params = useParams();
 	const router = useRouter();
-	const id = params.id as string;
+	const jobId = params.id as string;
 	const isMobile = useMediaQuery("(max-width: 768px)");
 	const [selectedOption, setSelectedOption] = useState<string>("JobDetails");
 	const [editMode, setEditMode] = useState<boolean>(false);
@@ -67,23 +84,32 @@ const JobDetails: React.FC = () => {
 	const [isApplyModalOpen, setIsApplyModalOpen] = useState<boolean>(false);
 	const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
 	const isRecruiter = useAppSelector((state) => state.toggle.isRecruiter);
-
+	const [isloading, setIsloading] = useState(false);
 	useEffect(() => {
-		const fetchJobDetails = async () => {
-			try {
-				// const response = await fetch(`/api/jobs/${id}`);
-				// const data = await response.json();
-				// setJobData(data);
+		if (!jobId) return; // Make sure jobId is defined
 
-				// Dummy value setting
-				setJobData(dummyJobDetails);
-			} catch (error) {
-				console.error("Error fetching job details:", error);
-			}
-		};
+		const jobDetailsDocRef = doc(db, "jobdetails", jobId);
+		setIsloading(true);
 
-		fetchJobDetails();
-	}, [id]);
+		const unsubscribe = onSnapshot(
+			jobDetailsDocRef,
+			(docSnapshot: DocumentSnapshot) => {
+				if (docSnapshot.exists()) {
+					const data = docSnapshot.data() as JobDetails;
+					setJobData(data);
+				} else {
+					setJobData(null); // Set to null if the document does not exist
+				}
+				setIsloading(false);
+			},
+			(error) => {
+				console.error("Error fetching job details", error);
+				setIsloading(false); // Ensure loading state is updated on error
+			},
+		);
+
+		return () => unsubscribe(); // Cleanup subscription on component unmount
+	}, [jobId]);
 
 	const handleBack = () => {
 		router.push("/dashboard");
@@ -135,6 +161,9 @@ const JobDetails: React.FC = () => {
 			console.error("Error submitting application:", error);
 		}
 	};
+	if (isloading) {
+		return <Loader />;
+	}
 
 	return (
 		jobData && (

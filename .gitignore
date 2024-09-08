@@ -46,3 +46,4 @@ public/sitemap-0.xml
 public/~partytown
 
 .env
+.env.local
