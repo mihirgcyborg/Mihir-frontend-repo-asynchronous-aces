@@ -1,8 +1,9 @@
 "use client";
 import { DashboardContent } from "@/components/Dashboard/DashboardContent";
+import withAuth from "@/components/Hoc/withAuth";
 import { PageContainer } from "@/components/PageContainer/PageContainer";
 
-export default function Dashboard() {
+function Dashboard() {
 	return (
 		<PageContainer title="Dashboard">
 			<DashboardContent />
@@ -10,4 +11,4 @@ export default function Dashboard() {
 	);
 }
 
-// export default withAuth(Dashboard);
+export default withAuth(Dashboard);

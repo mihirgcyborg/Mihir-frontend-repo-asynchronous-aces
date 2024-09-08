@@ -32,10 +32,22 @@ import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { Job } from "@/types/type";
 import {
 	addJob,
+	setJobs,
+	setLoadingForJobs,
 	setSelectedDepartment,
 	setSelectedStatus,
 } from "@/redux/features/jobs/jobSlice";
-import { fetchJobsAsync } from "@/redux/features/jobs/jobActions";
+
+import { createJob } from "@/api/jobs";
+import { FirebaseError } from "firebase/app";
+import { notifications, showNotification } from "@mantine/notifications";
+import {
+	collection,
+	DocumentSnapshot,
+	onSnapshot,
+	QuerySnapshot,
+} from "firebase/firestore";
+import { db } from "@/firebase/firebaseConfig";
 
 const JobCard = ({
 	id: jobId,
@@ -256,12 +268,14 @@ const JobSection = () => {
 	const { jobs, selectedStatus, selectedDepartment } = useAppSelector(
 		(state) => state.jobs,
 	);
-	const loading = !jobs?.length;
+	const loading = useAppSelector((state) => state.jobs.isLoading);
+	const currentUser = useAppSelector((state) => state.auth.currentUser);
+	const userUid = currentUser?.uid;
 	const [searchedJobs, setSearchedJobs] = useState<Job[]>([]);
 	const [modalOpen, setModalOpen] = useState(false);
 	const isRecruiter = useAppSelector((state) => state.toggle.isRecruiter);
-	const [formData, setFormData] = useState<Job>({
-		id: 0,
+	const initialFormData: Job = {
+		id: "",
 		title: "",
 		department: "",
 		jobType: "",
@@ -269,11 +283,52 @@ const JobSection = () => {
 		experiences: "",
 		location: "",
 		salary: "",
-	});
+		status: "active",
+		candidatesApplied: 0,
+		createdBy: currentUser?.uid,
+	};
+
+	const [formData, setFormData] = useState<Job>(initialFormData);
 
 	useEffect(() => {
-		dispatch(fetchJobsAsync());
-	}, [dispatch]);
+		if (!userUid) return;
+		const jobsCollectionRef = collection(db, "jobs");
+		dispatch(setLoadingForJobs(true));
+
+		// Subscribe to Firestore updates
+		const unsubscribe = onSnapshot(
+			jobsCollectionRef,
+			(snapshot: QuerySnapshot) => {
+				let jobsposting: Job[] = [];
+
+				snapshot.docs.forEach((doc: DocumentSnapshot) => {
+					let job = doc.data() as Job;
+
+					// Only push job if user is recruiter and job matches userUid
+					if (isRecruiter) {
+						if (job.createdBy === userUid) {
+							jobsposting.push({ ...job, id: doc.id });
+						}
+					} else {
+						// For non-recruiter users, push all jobs
+						jobsposting.push({ ...job, id: doc.id });
+					}
+				});
+
+				// Dispatch action to update jobs state after fetching
+				console.log("jobsposting", jobsposting);
+				dispatch(setJobs(jobsposting));
+				dispatch(setLoadingForJobs(false));
+			},
+			(error) => {
+				console.error("Error fetching jobs:", error);
+			},
+		);
+
+		// Cleanup on component unmount
+		return () => unsubscribe();
+	}, [dispatch, userUid, isRecruiter]);
+
 	const filterAndSortJobs = useCallback(() => {
 		let filteredJobs = jobs.filter((job) => job.status === selectedStatus);
 
@@ -283,12 +338,12 @@ const JobSection = () => {
 			);
 		}
 
-		const sortedOrders = filteredJobs.sort((a: Job, b: Job) => a.id - b.id);
-		setSearchedJobs(sortedOrders);
+		// const sortedOrders = filteredJobs.sort((a: Job, b: Job) => a.id - b.id);
+		setSearchedJobs(filteredJobs);
 	}, [jobs, selectedStatus, selectedDepartment]);
 	useEffect(() => {
 		filterAndSortJobs();
-	}, [selectedStatus, selectedDepartment]);
+	}, [jobs, selectedStatus, selectedDepartment, filterAndSortJobs]);
 
 	const handleStatusChange = (value: string | null) => {
 		if (value === "active" || value === "inactive") {
@@ -308,13 +363,46 @@ const JobSection = () => {
 	};
 
 	// Handle form submission
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		dispatch(addJob({ ...formData, id: jobs.length + 1 }));
-		setModalOpen(false);
+		try {
+			const createdJob = await createJob(formData);
+
+			setFormData(initialFormData);
+			notifications.show({
+				title: "Job Created",
+				message: "Chat",
+				color: "lightyellow",
+				w: "200px",
+
+				styles: (theme) => ({
+					root: {
+						position: "fixed",
+						zIndex: 9999,
+						bottom: 35,
+						right: 0,
+					},
+				}),
+			});
+			// dispatch(addJob({  }));
+		} catch (error) {
+			const firebaseError = error as FirebaseError;
+			if (error instanceof Error) {
+				alert(error.message || "Login failed. Please check your credentials.");
+			} else {
+				alert("An unexpected error occurred.");
+			}
+		} finally {
+			setModalOpen(false);
+		}
 	};
 	if (loading) {
-		return <Loader />;
+		return (
+			<Loader
+				size={100}
+				style={{ display: "flex", justifyContent: "center" }}
+			/>
+		);
 	}
 
 	return (

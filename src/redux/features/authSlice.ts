@@ -1,34 +1,41 @@
 'use client'
+import { user } from "@/types/type";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { FirebaseError } from "firebase/app";
 
 interface AuthState{
-    token:string |null;
-    isAuthenticated:boolean;
+    currentUser:user | null,
+    isLoading:boolean,
+    error:string | null;
 }
 
 const initialState: AuthState = {
-    token:null,
-    isAuthenticated:false
+    currentUser:null,
+    isLoading:false,
+    error:null,
 }
 
 const authSlice = createSlice({
     name:"auth",
     initialState,
     reducers:{
-        login:(state,action: PayloadAction<string>)=>{
-            state.token = action.payload;
-            state.isAuthenticated=true;
+        setCurrentUser:(state,action:PayloadAction<user | null>)=>{
+           
+            state.currentUser = action.payload;
+            
         },
-        logout:(state)=>{
-            state.token = null;
-            state.isAuthenticated=false;
+        setLoading:(state,action:PayloadAction<boolean>)=>{
+            state.isLoading=action.payload;
         },
-        setToken: (state, action: PayloadAction<string | null>) => {
-            state.token = action.payload;
-          },
+        setError:(state,action:PayloadAction<string | null>)=>{
+            state.error = action.payload;
+        },
+        clearError:(state) =>{
+            state.error = null;
+        },
     }
 })
 
-export const {login, logout,setToken} = authSlice.actions;
+export const {setCurrentUser,setLoading,setError,clearError} = authSlice.actions;
 
 export default authSlice.reducer;

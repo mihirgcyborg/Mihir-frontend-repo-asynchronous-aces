@@ -17,16 +17,9 @@ const JobCard: React.FC<JobCardProps> = ({
 	searchButtonDes,
 }) => {
 	const router = useRouter();
-	const [userToken, setUserToken] = useCookie("userToken"); // useCookies hook to get the cookie
 
 	const handleLoginClick = () => {
-		if (userToken) {
-			// If userToken is found, redirect to the dashboard
-			router.push("/dashboard");
-		} else {
-			// Otherwise, redirect to the login page
-			router.push("/login");
-		}
+		router.push("/dashboard");
 	};
 	return (
 		<Card

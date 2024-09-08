@@ -122,11 +122,11 @@ export const CandidateRow = ({ user }: { user: Candidate }) => {
 	const handleMessageClick = () => {
 		setOpened(true); // Open the modal when the button is clicked
 	};
-	console.log(user);
+	// console.log(user);
 
 	const handleSendMessage = () => {
 		// Logic to initiate the chat with the first message
-		console.log("Send message:", message);
+		// console.log("Send message:", message);
 		setOpened(false); // Close the modal after sending the message
 	};
 	return (

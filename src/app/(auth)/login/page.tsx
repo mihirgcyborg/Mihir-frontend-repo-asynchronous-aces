@@ -1,6 +1,8 @@
 "use client";
 import { LoginForm } from "@/components/Auth/LoginForm";
+import withAuth from "@/components/Hoc/withAuth";
 
-export default function Login() {
+function Login() {
 	return <LoginForm />;
 }
+export default withAuth(Login);
