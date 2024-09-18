@@ -16,26 +16,17 @@ import { AppProvider } from "./provider";
 import { store } from "@/redux/store";
 
 export const metadata = {
-	metadataBase: new URL("https://mantine-admin.vercel.app/"),
-	title: { default: "Mantine Admin", template: "%s | Mantine Admin" },
-	description: "A Modern Dashboard with Next.js.",
-	keywords: [
-		"Next.js",
-		"Mantine",
-		"Admin",
-		"Template",
-		"Admin Template",
-		"Admin Dashboard",
-		"Admin Panel",
-		"Admin UI",
-	],
+	metadataBase: new URL("https://recruitnext.vercel.app/"),
+	title: { default: "RecruitNext", template: "%s | RecruitNext" },
+	description: "All in one Recruitment Solution",
+	keywords: ["Recruitment", "Free hiring", "Talent", "Innovations"],
 	authors: [
 		{
-			name: "jotyy",
-			url: "https://jotyy.vercel.app",
+			name: "Mihir Gadhe",
+			url: "https://recruitnext.vercel.app/",
 		},
 	],
-	creator: "jotyy",
+	creator: "mihir",
 	manifest: "https://mantine-admin.vercel.app/site.webmanifest",
 };
 

@@ -14,8 +14,8 @@ export function Footer() {
 			<Container className={classes.inner}>
 				<Text c="dimmed" fz="sm">
 					Build by{" "}
-					<Anchor href="https://github.com/jotyy" size="sm">
-						jotyy
+					<Anchor href="https://github.com/mihirgcyborg/" size="sm">
+						mihirgcyborg
 					</Anchor>
 					. Hosted on{" "}
 					<Anchor href="https://vercel.com" size="sm">
